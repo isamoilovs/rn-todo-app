@@ -16,9 +16,9 @@ export const ToDo = ({todo, remove}) => {
                     title="delete"
                 />
 
-                <Button
+                {/* <Button
                     title="edit"
-                />
+                /> */}
             </View>
         </View>
     )
@@ -30,10 +30,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding:15,
-        borderWidth: 1,
-        borderColor: '#999999',
-        borderRadius: 5,
-        marginBottom: 10
+        marginBottom: 10,
+        backgroundColor: 'white',
+        borderRadius: 7
     },
 
     buttonWrapper: {
