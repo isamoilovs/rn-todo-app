@@ -1,9 +1,11 @@
 import react from "react";
 import { StyleSheet, View, Pressable, ImageBackground, Text } from "react-native";
 
-export default AddToDoBtn = () => {
+export default AddToDoBtn = ({onClick}) => {
     return(
-        <Pressable style={styles.addBtn}>
+        <Pressable 
+            style={styles.addBtn}
+            onPress={onClick}>
             <ImageBackground
                 style={styles.imageAdd}
                 source={require('../../assets/add.png')}

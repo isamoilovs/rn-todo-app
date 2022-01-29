@@ -15,10 +15,6 @@ export const ToDo = ({todo, remove}) => {
                     onPress={removeToDo}
                     title="delete"
                 />
-
-                {/* <Button
-                    title="edit"
-                /> */}
             </View>
         </View>
     )
@@ -37,7 +33,7 @@ const styles = StyleSheet.create({
 
     buttonWrapper: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         width: '35%'
     }
 })

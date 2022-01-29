@@ -1,16 +1,18 @@
-import { StyleSheet, View, Text, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import { AddToDo } from '../components/AddToDo';
 import { useEffect, useState } from 'react';
 import { ToDo } from '../components/ToDo';
-import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import SearchBar from '../components/SearchBar';
 import AddToDoBtn from '../components/AddToDoBtn';
+import AddToDoModal from '../components/AddToDoModal';
 
 
-export default function ToDoApp() {
+export default ToDoApp = () => {
+    const {getItem, setItem} = useAsyncStorage('@todolist');
     const [todos, setTodos] = useState([]);
     const [isAddBtnVisible, setAddBtnVisible] = useState(true);
-    const {getItem, setItem} = useAsyncStorage('@todolist');
+    const [isAddToDoModalVisible, setAddToDoModalVisible] = useState(false);
 
     useEffect(async () => {
       const todosFromStorage = await getItem();
@@ -32,6 +34,7 @@ export default function ToDoApp() {
         id: JSON.stringify(todos.length),
         title: title
       }]);
+      setAddToDoModalVisible(false);
     }
 
     const removeToDo = (todo) => {
@@ -40,13 +43,16 @@ export default function ToDoApp() {
     }
   
     return (
-      <View style={styles.body}>
+      <View
+        style={styles.body}
+      >
         <SearchBar 
           onPressIn={() => setAddBtnVisible(false)}
           onEndEditing={() => setAddBtnVisible(true)}
         />
-        <View style={styles.container}>
-          <AddToDo onSubmit={addToDo} />
+        <View 
+          style={styles.container}
+        >
           <FlatList
             data={todos}
             keyExtractor={item => item.id.toString()}
@@ -54,7 +60,15 @@ export default function ToDoApp() {
               <ToDo todo={item} remove={removeToDo}/>
             )}/>
         </View>
-        {isAddBtnVisible && <AddToDoBtn />}
+        <AddToDoModal 
+              isModalVisible={isAddToDoModalVisible}
+              setModalVisible={setAddToDoModalVisible}
+              addToDo={addToDo}
+            />
+        {isAddBtnVisible && 
+          <AddToDoBtn 
+            onClick={() => setAddToDoModalVisible(true)}
+          />}
       </View>
     );
   }
@@ -66,7 +80,7 @@ export default function ToDoApp() {
 
     body: {
       paddingTop: 40,
-      backgroundColor: '#f4f4f4',
+      backgroundColor: '#eeeeee',
       position: 'absolute',
       left: 0,
       right: 0,
