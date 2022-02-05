@@ -1,16 +1,79 @@
-import react from "react";
-import { StyleSheet, View, Pressable, ImageBackground, Text } from "react-native";
+import react, { useEffect, useRef } from "react";
+import { StyleSheet, Pressable, ImageBackground, Animated } from "react-native";
 
-export default AddToDoBtn = ({onClick}) => {
+export default AddToDoBtn = ({isVisible, onClick}) => {
+    const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+    const startMoving = useRef(new Animated.ValueXY({x: 0, y: 0})).current;
+    const startFading = useRef(new Animated.Value(1)).current;
+
+    useEffect(() => {
+        if(!isVisible) {
+            hideBtn();
+            return;
+        }
+        setTimeout(() => showBtn(), 300)
+    }, [isVisible])
+
+    const hideBtn = () => {
+        Animated.parallel([
+            Animated.timing(startMoving,
+                {
+                    toValue: {
+                        x: 0,
+                        y: 10
+                    },
+                    useNativeDriver: true,
+                    duration: 300
+                }),
+            Animated.timing(startFading,
+                {
+                    toValue: 0,
+                    useNativeDriver: true,
+                    duration: 300
+                })
+        ]).start();
+    }
+
+    const showBtn = () => {
+        Animated.parallel([
+            Animated.timing(startMoving,
+                {
+                    toValue: {
+                        x: 0,
+                        y: -10
+                    },
+                    useNativeDriver: true,
+                    duration: 300
+                }),
+            Animated.timing(startFading,
+                {
+                    toValue: 1,
+                    useNativeDriver: true,
+                    duration: 300
+                })
+        ]).start();
+    }
+
+
+
     return(
-        <Pressable 
-            style={styles.addBtn}
-            onPress={onClick}>
+        <AnimatedPressable 
+            style={[
+                styles.addBtn,
+                {
+                    translateX: startMoving.x,
+                    translateY: startMoving.y,
+                    opacity: startFading
+                }
+            ]}
+            onPress={onClick}
+            disabled={!isVisible}
+        >
             <ImageBackground
                 style={styles.imageAdd}
                 source={require('../../assets/add.png')}
             />
-        </Pressable>
+        </AnimatedPressable>
     );
 }
 

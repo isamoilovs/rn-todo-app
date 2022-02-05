@@ -1,16 +1,37 @@
-import react from "react";
-import { View, StyleSheet, TextInput, ImageBackground } from "react-native";
+import react, { useEffect, useRef, useState } from "react";
+import { View, StyleSheet, TextInput, Animated } from "react-native";
 
-export default SearchBar = ({onPressIn, onEndEditing}) => {
+export default SearchBar = ({onFocus, onBlur}) => {
+    const inputRef = useRef(null)
+    const [isInputFocused, setInputFocused] = useState(false);
+    // const [isKbdAutoShown, setKbdAutoShown] = useState(false);
+
+    useEffect(() => {
+        isInputFocused ? inputRef.current.focus() : inputRef.current.blur();
+    }, [isInputFocused])
+
+    const handleInputFocus = () => {
+        setTimeout(() => {
+            setInputFocused(true);
+        }, 500);
+        onFocus();
+    }
+
+    const handleInputBlur = () => {
+        setInputFocused(false);
+        onBlur();
+    }
+
     return(
-        <View style={styles.container}>
+        <Animated.View style={styles.container}>
             <TextInput
-                onPressIn={onPressIn}
-                onEndEditing={onEndEditing}
+                ref={inputRef}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
                 placeholder="Search tasks..."
                 style={styles.input}
             />
-        </View>
+        </Animated.View>
     );
 }
 
@@ -29,6 +50,7 @@ const styles = StyleSheet.create({
     input: {
         paddingHorizontal: 25,
         paddingVertical: 10,
-        fontSize: 17
+        fontSize: 17,
+        width: '100%'
     }
 })

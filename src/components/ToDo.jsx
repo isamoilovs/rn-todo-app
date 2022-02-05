@@ -8,8 +8,10 @@ export const ToDo = ({todo, remove}) => {
 
     return (
         <View style={styles.todo}>
-            <Text>{todo.title}</Text>
-
+            {todo.title && <Text style={styles.title}>{todo.title}</Text>}
+            <View style={styles.tasksWrapper}>
+                {todo.tasks.map((elem) => <Text key={elem.id} style={styles.task}>{elem.description}</Text>)}
+            </View>
             <View style={styles.buttonWrapper} >
                 <Button
                     onPress={removeToDo}
@@ -22,9 +24,8 @@ export const ToDo = ({todo, remove}) => {
 
 const styles = StyleSheet.create({
     todo: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
         padding:15,
         marginBottom: 10,
         backgroundColor: 'white',
@@ -34,6 +35,16 @@ const styles = StyleSheet.create({
     buttonWrapper: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        width: '35%'
+        alignItems: 'flex-end',
+        width: '100%'
+    },
+
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+
+    tasksWrapper: {
+        marginLeft: 50
     }
 })
